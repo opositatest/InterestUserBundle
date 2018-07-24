@@ -1,0 +1,17 @@
+{
+  "name": "opositatest/interest-user-bundle",
+  "type": "symfony-bundle",
+  "description": "User Interests, follow & unfollow",
+  "authors": [
+    {
+      "name": "Fernando Hidalgo Becerra",
+      "email": "fernando@sopinet.com"
+    }
+  ],
+  "require": {},
+  "require-dev": {},
+  "autoload": {
+    "psr-0": { "Opositatest\\InterestUserBundle": "" }
+  },
+  "target-dir": "Opositatest/InterestUserBundle"
+}
