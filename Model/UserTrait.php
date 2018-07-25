@@ -1,0 +1,73 @@
+<?php
+namespace Opositatest\InterestUserBundle\Model;
+
+use Doctrine\ORM\Mapping as ORM;
+
+trait UserTrait
+{
+    /**
+     * @ORM\ManyToMany(targetEntity="\Opositatest\InterestUserBundle\Entity\Interest", mappedBy="followUsers")
+     */
+    private $followInterests;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="\Opositatest\InterestUserBundle\Entity\Interest", mappedBy="unfollowUsers")
+     */
+    private $unfollowInterests;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->followInterests = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->unfollowInterests = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * @param \Opositatest\InterestUserBundle\Entity\Interest $followInterest
+     * @return $this
+     */
+    public function addFollowInterest(\Opositatest\InterestUserBundle\Entity\Interest $followInterest) {
+        $this->followInterests[] = $followInterest;
+        return $this;
+    }
+
+    /**
+     * @param \Opositatest\InterestUserBundle\Entity\Interest $followInterest
+     */
+    public function removeFollowInterest(\Opositatest\InterestUserBundle\Entity\Interest $followInterest) {
+        $this->followInterests->removeElement($followInterest);
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getFollowInterests() {
+        return $this->followInterests;
+    }
+
+    /**
+     * @param \Opositatest\InterestUserBundle\Entity\Interest $unfollowInterest
+     * @return $this
+     */
+    public function addUnfollowInterest(\Opositatest\InterestUserBundle\Entity\Interest $unfollowInterest) {
+        $this->unfollowInterests[] = $unfollowInterest;
+        return $this;
+    }
+
+    /**
+     * @param \Opositatest\InterestUserBundle\Entity\Interest $unfollowInterest
+     */
+    public function removeUnfollowInterest(\Opositatest\InterestUserBundle\Entity\Interest $unfollowInterest) {
+        $this->unfollowInterests->removeElement($unfollowInterest);
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getUnfollowInterests() {
+        return $this->unfollowInterests;
+    }
+}
+?>

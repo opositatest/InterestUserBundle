@@ -28,3 +28,19 @@ orm:
    resolve_target_entities:
       Opositatest\InterestUserBundle\Model\UserInterface: AppBundle\Entity\User
 ```
+
+## Connect with SonataAdmin (optional)
+
+Add OpositatestInterestUserBundle group:
+```
+# app/config/config.yml
+sonata_admin:
+    ...
+    dashboard:
+        ...
+        groups:
+            OpositatestInterestUserBundle:
+                label: "Intereses de Usuario"
+        blocks:
+            - { position: right, type: sonata.admin.block.admin_list, settings: { groups: [OpositatestInterestUserBundle] } }
+```            

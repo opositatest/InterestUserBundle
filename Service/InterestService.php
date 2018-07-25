@@ -10,11 +10,11 @@ class InterestService {
 
     }
 
-    public function addInterestUser($interestString, $userId, $mode = self::FOLLOW_INTEREST) {
+    public function addInterestUser($interestString, $userId, $followMode = self::FOLLOW_INTEREST) {
 
     }
 
-    public function removeInterestUser($interestString, $userId, $mode = self::FOLLOW_INTEREST) {
+    public function removeInterestUser($interestString, $userId, $followMode = self::FOLLOW_INTEREST) {
 
     }
 }

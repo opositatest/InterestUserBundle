@@ -1,4 +1,7 @@
 services:
-#    opositatest_interest_user.example:
-#        class: Opositatest\InterestUserBundle\Example
-#        arguments: ["@service_id", "plain_value", "%parameter%"]
+    admin.interestUser.interest:
+        class: Opositatest\InterestUserBundle\Admin\InterestAdmin
+        arguments: [~, Opositatest\InterestUserBundle\Entity\Interest, SonataAdminBundle:CRUD]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "OpositatestInterestUserBundle", label: "Intereses" }
+        public: true
