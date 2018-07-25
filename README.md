@@ -2,9 +2,16 @@
 
 ## Basic Installation...
 
+### Composer install
+
 composer require opositatest/interest-user-bundle
 
-add bundle to AppKernel
+### Add bundle to AppKernel:
+
+```php
+# app/AppKernel.php
+new Opositatest\InterestUserBundle\InterestUserBundle(),
+```
 
 ## Connect with User
 
