@@ -2,7 +2,7 @@
 
 ## Basic Installation...
 
-composer require...
+composer require opositatest/interest-user-bundle
 
 add bundle to AppKernel
 
