@@ -1,3 +1,4 @@
-opositatest_interestuser:
-    resource: '@OpositatestInterestUserBundle/Controller/'
+opositatest_interestuser_apiInterest:
+    resource: Opositatest\InterestUserBundle\Controller\ApiInterestController
+    defaults: {_format: json}
     type: annotation

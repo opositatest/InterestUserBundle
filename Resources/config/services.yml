@@ -1,7 +1,11 @@
 services:
-    admin.interestUser.interest:
+    interestUser.admin.interest:
         class: Opositatest\InterestUserBundle\Admin\InterestAdmin
         arguments: [~, Opositatest\InterestUserBundle\Entity\Interest, SonataAdminBundle:CRUD]
         tags:
             - { name: sonata.admin, manager_type: orm, group: "OpositatestInterestUserBundle", label: "Intereses" }
+        public: true
+    interestUser.interest:
+        class: Opositatest\InterestUserBundle\Service\InterestService
+        arguments: ["@doctrine.orm.entity_manager"]
         public: true

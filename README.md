@@ -1,5 +1,11 @@
 # INSTALLATION
 
+## Basic Installation...
+
+composer require...
+
+add bundle to AppKernel
+
 ## Connect with User
 
 ### Trait for your User Entity
@@ -27,6 +33,30 @@
 orm:
    resolve_target_entities:
       Opositatest\InterestUserBundle\Model\UserInterface: AppBundle\Entity\User
+```
+
+## Add routes
+
+Add routes to your project. It should be compatible with nelmio api doc
+
+```yaml
+# app/config/routing.yml
+opositatest_interestuser_api:
+    resource: "@OpositatestInterestUserBundle/Resources/config/routing.yml"
+    prefix:   /api/ # Prefix is customizable
+```
+
+## API
+
+Enable annotations for group feature
+
+```yaml
+# app/config/config.yml
+framework:
+    # ...
+    serializer:
+        enable_annotations: true
+
 ```
 
 ## Connect with SonataAdmin (optional)

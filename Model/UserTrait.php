@@ -2,15 +2,18 @@
 namespace Opositatest\InterestUserBundle\Model;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 trait UserTrait
 {
     /**
+     * @Groups({"interestUserView"})
      * @ORM\ManyToMany(targetEntity="\Opositatest\InterestUserBundle\Entity\Interest", mappedBy="followUsers")
      */
     private $followInterests;
 
     /**
+     * @Groups({"interestUserView"})
      * @ORM\ManyToMany(targetEntity="\Opositatest\InterestUserBundle\Entity\Interest", mappedBy="unfollowUsers")
      */
     private $unfollowInterests;

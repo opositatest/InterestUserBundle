@@ -3,6 +3,8 @@ namespace Opositatest\InterestUserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Opositatest\InterestUserBundle\Model\UserInterface;
+use Opositatest\InterestUserBundle\Model\UserTrait;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="Opositatest\InterestUserBundle\Repository\InterestRepository")
@@ -10,6 +12,7 @@ use Opositatest\InterestUserBundle\Model\UserInterface;
  */
 class Interest {
     /**
+     * @Groups({"interestUserView"})
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -17,6 +20,7 @@ class Interest {
     private $id;
 
     /**
+     * @Groups({"interestUserView"})
      * @ORM\Column(type="string")
      */
     private $name;
@@ -58,8 +62,10 @@ class Interest {
      *
      * @return Interest
      */
-    public function addFollowUser(\Opositatest\InterestUserBundle\Model\UserInterface $followUser)
+    public function addFollowUser($followUser)
     {
+        /** @var UserTrait $followUser */
+        $followUser->addFollowInterest($this);
         $this->followUsers[] = $followUser;
 
         return $this;
@@ -72,8 +78,10 @@ class Interest {
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeFollowUser(\Opositatest\InterestUserBundle\Model\UserInterface $followUser)
+    public function removeFollowUser($followUser)
     {
+        /** @var UserTrait $followUser */
+        $followUser->removeFollowInterest($this);
         return $this->followUsers->removeElement($followUser);
     }
 
@@ -88,14 +96,25 @@ class Interest {
     }
 
     /**
+     * Exists followUser?
+     *
+     * @param $followUser
+     * @return bool
+     */
+    public function existFollowUser($followUser) {
+        return in_array($followUser, $this->getFollowUsers()->toArray(), TRUE);
+    }
+
+    /**
      * Add unfollowUser.
      *
      * @param \Opositatest\InterestUserBundle\Model\UserInterface $unfollowUser
      *
      * @return Interest
      */
-    public function addUnfollowUser(\Opositatest\InterestUserBundle\Model\UserInterface $unfollowUser)
+    public function addUnfollowUser($unfollowUser)
     {
+        /** @var UserTrait $followUser */
         $this->unfollowUsers[] = $unfollowUser;
 
         return $this;
@@ -108,8 +127,9 @@ class Interest {
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeUnfollowUser(\Opositatest\InterestUserBundle\Model\UserInterface $unfollowUser)
+    public function removeUnfollowUser($unfollowUser)
     {
+        /** @var UserTrait $followUser */
         return $this->unfollowUsers->removeElement($unfollowUser);
     }
 
@@ -123,6 +143,16 @@ class Interest {
         return $this->unfollowUsers;
     }
 
+    /**
+     * Exists unfollowUser?
+     *
+     * @param $unfollowUser
+     * @return bool
+     */
+    public function existUnfollowUser($unfollowUser)
+    {
+        return in_array($unfollowUser, $this->getUnfollowUsers()->toArray(), TRUE);
+    }
     /**
      * Set name.
      *
