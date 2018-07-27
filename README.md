@@ -81,3 +81,33 @@ sonata_admin:
         blocks:
             - { position: right, type: sonata.admin.block.admin_list, settings: { groups: [OpositatestInterestUserBundle] } }
 ```            
+
+# USAGE
+
+We have three functions, "/api/" is customizable prefix url:
+
+## Add interest
+
+It add interest to logged user
+
+```
+POST
+/api/interest/{interestId}
+```
+## Remove interest
+
+It remove interest to logged user 
+
+```
+DELETE
+/api/interest/{interestId}
+```
+
+## View interests
+
+It return interests global and for logged user
+
+```
+GET
+/api//interests
+```
