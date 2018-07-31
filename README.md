@@ -111,3 +111,10 @@ It return interests global and for logged user
 GET
 /api//interests
 ```
+
+# Test
+
+You can try unit test with:
+```
+./vendor/bin/phpunit vendor/opositatest/interest-user-bundle/Opositatest/InterestUserBundle
+```

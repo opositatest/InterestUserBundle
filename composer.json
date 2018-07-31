@@ -12,7 +12,9 @@
     "php": ">=5.5.9",
     "doctrine/doctrine-bundle": "^1.6",
     "symfony/serializer": "*",
-    "nelmio/api-doc-bundle": "^3.2"
+    "nelmio/api-doc-bundle": "^3.2",
+    "symfony/phpunit-bridge": "^2.8 || ^3.0 || ^4.0",
+    "phpunit/phpunit": "^4.8.35|^5.7.11|^6.5"
   },
   "require-dev": {},
   "autoload": {
