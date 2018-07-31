@@ -10,7 +10,7 @@ composer require opositatest/interest-user-bundle
 
 ```php
 # app/AppKernel.php
-new Opositatest\InterestUserBundle\InterestUserBundle(),
+new Opositatest\InterestUserBundle\OpositatestInterestUserBundle(),
 ```
 
 ## Connect with User
