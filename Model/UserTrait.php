@@ -32,6 +32,7 @@ trait UserTrait
      * @return $this
      */
     public function addFollowInterest(\Opositatest\InterestUserBundle\Entity\Interest $followInterest) {
+        $followInterest->addFollowUser($this);
         $this->followInterests[] = $followInterest;
         return $this;
     }
@@ -40,6 +41,7 @@ trait UserTrait
      * @param \Opositatest\InterestUserBundle\Entity\Interest $followInterest
      */
     public function removeFollowInterest(\Opositatest\InterestUserBundle\Entity\Interest $followInterest) {
+        $followInterest->removeFollowUser($this);
         $this->followInterests->removeElement($followInterest);
     }
 
@@ -55,6 +57,7 @@ trait UserTrait
      * @return $this
      */
     public function addUnfollowInterest(\Opositatest\InterestUserBundle\Entity\Interest $unfollowInterest) {
+        $unfollowInterest->addFollowUser($this);
         $this->unfollowInterests[] = $unfollowInterest;
         return $this;
     }
@@ -63,6 +66,7 @@ trait UserTrait
      * @param \Opositatest\InterestUserBundle\Entity\Interest $unfollowInterest
      */
     public function removeUnfollowInterest(\Opositatest\InterestUserBundle\Entity\Interest $unfollowInterest) {
+        $unfollowInterest->removeFollowUser($this);
         $this->unfollowInterests->removeElement($unfollowInterest);
     }
 

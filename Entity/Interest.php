@@ -71,7 +71,6 @@ class Interest {
     public function addFollowUser($followUser)
     {
         /** @var UserTrait $followUser */
-        $followUser->addFollowInterest($this);
         $this->followUsers[] = $followUser;
 
         return $this;
@@ -87,7 +86,6 @@ class Interest {
     public function removeFollowUser($followUser)
     {
         /** @var UserTrait $followUser */
-        $followUser->removeFollowInterest($this);
         return $this->followUsers->removeElement($followUser);
     }
 

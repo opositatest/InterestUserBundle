@@ -41,8 +41,8 @@ You need add followInterests and unfollowInterests to UserAdmin Class, so:
     protected function configureFormFields(FormMapper $formMapper)
     {
         ...
-            ->add('followInterests')
-            ->add('unfollowInterests')
+            ->add('followInterests', 'sonata_type_model', array('multiple' => true, 'by_reference' => false))
+            ->add('unfollowInterests', 'sonata_type_model', array('multiple' => true, 'by_reference' => false))
         ...
     }
 ```
