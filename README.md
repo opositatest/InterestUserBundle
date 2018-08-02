@@ -33,6 +33,20 @@ new Opositatest\InterestUserBundle\OpositatestInterestUserBundle(),
     }
 ```
 
+### Add fields in UserAdmin Class
+
+You need add followInterests and unfollowInterests to UserAdmin Class, so:
+```php
+# src/AppBundle/Admin/UserAdmin
+    protected function configureFormFields(FormMapper $formMapper)
+    {
+        ...
+            ->add('followInterests')
+            ->add('unfollowInterests')
+        ...
+    }
+```
+
 ### Configuration config.yml
 
 ```yaml

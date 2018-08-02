@@ -36,6 +36,12 @@ class Interest {
      * @ORM\JoinTable(name="opositatest_interestuser_unfollowUsers_unfollowInterests")
      */
     private $unfollowUsers;
+
+    public function __toString()
+    {
+        return $this->getName();
+    }
+
     /**
      * Constructor
      */
