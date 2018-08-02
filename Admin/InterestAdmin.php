@@ -17,12 +17,6 @@ class InterestAdmin extends AbstractAdmin
             ->add('name', null, [
                 'label' => 'Nombre'
             ])
-            ->add('followUsers', null, [
-                'label' => 'Usuarios con interés'
-            ])
-            ->add('unfollowUsers', null, [
-                'label' => 'Usuarios sin interés'
-            ])
         ;
     }
 
