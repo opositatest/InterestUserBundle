@@ -18,6 +18,15 @@ class InterestService {
         $this->em = $em;
     }
 
+    /**
+     * Add Interest to User
+     *
+     * @param Interest $interest
+     * @param $user
+     * @param string $followMode
+     * @param bool $flush
+     * @return bool
+     */
     public function postInterestUser(Interest $interest, $user, $followMode = self::FOLLOW_INTEREST, $flush = false) {
         $done = false;
 
@@ -25,12 +34,12 @@ class InterestService {
             $followMode = self::FOLLOW_INTEREST;
         }
         if ($followMode == self::FOLLOW_INTEREST) {
-            if (!$interest->existFollowUser($user)) {
+            if ($user != null && !$interest->existFollowUser($user)) {
                 $interest->addFollowUser($user);
                 $done = true;
             }
         } else {
-            if (!$interest->existUnfollowUser($user)) {
+            if ($user != null && !$interest->existUnfollowUser($user)) {
                 $interest->addUnfollowUser($user);
                 $done = true;
             }
@@ -43,6 +52,15 @@ class InterestService {
         return $done;
     }
 
+    /**
+     * Remove Interest from User
+     *
+     * @param Interest $interest
+     * @param $user
+     * @param string $followMode
+     * @param bool $flush
+     * @return bool
+     */
     public function deleteInterestUser(Interest $interest, $user, $followMode = self::FOLLOW_INTEREST, $flush = false) {
         $done = false;
 
@@ -50,11 +68,11 @@ class InterestService {
             $followMode = self::FOLLOW_INTEREST;
         }
         if ($followMode == self::FOLLOW_INTEREST) {
-            if ($interest->existFollowUser($user)) {
+            if ($user != null && $interest->existFollowUser($user)) {
                 $done = $interest->removeFollowUser($user);
             }
         } else {
-            if ($interest->existUnfollowUser($user)) {
+            if ($user != null && $interest->existUnfollowUser($user)) {
                 $done = $interest->removeUnfollowUser($user);
             }
         }
@@ -66,6 +84,11 @@ class InterestService {
         return $done;
     }
 
+    /**
+     * Return all Interests
+     *
+     * @return array
+     */
     public function getInterests() {
         /** @var InterestRepository $repositoryInterest */
         $repositoryInterest = $this->em->getRepository("OpositatestInterestUserBundle:Interest");
