@@ -36,14 +36,23 @@ class InterestService {
         if ($followMode == self::FOLLOW_INTEREST) {
             if ($user != null && !$interest->existFollowUser($user)) {
                 $interest->addFollowUser($user);
+                // Remove unfollowUser if exists
+                if ($interest->existUnfollowUser($user)) {
+                    $interest->removeUnfollowUser($user);
+                }
                 $done = true;
             }
         } else {
             if ($user != null && !$interest->existUnfollowUser($user)) {
                 $interest->addUnfollowUser($user);
+                // Remove followUser if exists
+                if ($interest->existFollowUser($user)) {
+                    $interest->removeFollowUser($user);
+                }
                 $done = true;
             }
         }
+
         $this->em->persist($interest);
         if ($flush) {
             $this->em->flush();

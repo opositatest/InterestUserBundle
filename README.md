@@ -47,6 +47,21 @@ You need add followInterests and unfollowInterests to UserAdmin Class, so:
     }
 ```
 
+Add validate function, so:
+```php
+    public function validate(ErrorElement $errorElement, $object)
+    {
+        /** @var SyliusUser $user */
+        $user = $object;
+        foreach($user->getFollowInterests() as $followInterest) {
+            if ($user->exitUnfollowInterest($followInterest)) {
+                $custom_error = "Interest ".$followInterest." used in follow and unfollow";
+                $errorElement->with( 'enabled' )->addViolation( $custom_error )->end();
+            }
+        }
+    }
+```
+
 ### Configuration config.yml
 
 ```yaml

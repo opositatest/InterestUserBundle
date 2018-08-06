@@ -35,10 +35,6 @@ trait UserTrait
     public function addFollowInterest(\Opositatest\InterestUserBundle\Entity\Interest $followInterest) {
         $followInterest->addFollowUser($this);
         $this->followInterests[] = $followInterest;
-        // Remove Unfollow if it exists
-        if ($this->exitUnfollowInterest($followInterest)) {
-            $this->removeUnfollowInterest($followInterest);
-        }
         return $this;
     }
 
@@ -64,10 +60,6 @@ trait UserTrait
     public function addUnfollowInterest(\Opositatest\InterestUserBundle\Entity\Interest $unfollowInterest) {
         $unfollowInterest->addUnfollowUser($this);
         $this->unfollowInterests[] = $unfollowInterest;
-        // Remove follow if it exists
-        if ($this->existFollowInterest($unfollowInterest)) {
-            $this->removeFollowInterest($unfollowInterest);
-        }
         return $this;
     }
 
