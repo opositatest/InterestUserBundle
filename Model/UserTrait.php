@@ -2,6 +2,7 @@
 namespace Opositatest\InterestUserBundle\Model;
 
 use Doctrine\ORM\Mapping as ORM;
+use Opositatest\InterestUserBundle\Entity\Interest;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 trait UserTrait
@@ -34,6 +35,10 @@ trait UserTrait
     public function addFollowInterest(\Opositatest\InterestUserBundle\Entity\Interest $followInterest) {
         $followInterest->addFollowUser($this);
         $this->followInterests[] = $followInterest;
+        // Remove Unfollow if it exists
+        if ($this->exitUnfollowInterest($followInterest)) {
+            $this->removeUnfollowInterest($followInterest);
+        }
         return $this;
     }
 
@@ -59,6 +64,10 @@ trait UserTrait
     public function addUnfollowInterest(\Opositatest\InterestUserBundle\Entity\Interest $unfollowInterest) {
         $unfollowInterest->addUnfollowUser($this);
         $this->unfollowInterests[] = $unfollowInterest;
+        // Remove follow if it exists
+        if ($this->existFollowInterest($unfollowInterest)) {
+            $this->removeFollowInterest($unfollowInterest);
+        }
         return $this;
     }
 
@@ -75,6 +84,26 @@ trait UserTrait
      */
     public function getUnfollowInterests() {
         return $this->unfollowInterests;
+    }
+
+    /**
+     * Return if exists followInterest
+     *
+     * @param Interest $followInterest
+     * @return bool
+     */
+    public function existFollowInterest(Interest $followInterest) {
+        return in_array($followInterest, $this->getFollowInterests()->toArray(), TRUE);
+    }
+
+    /**
+     * Return if exists unfollowInterest
+     *
+     * @param Interest $unfollowInterest
+     * @return bool
+     */
+    public function exitUnfollowInterest(Interest $unfollowInterest) {
+        return in_array($unfollowInterest, $this->getUnfollowInterests()->toArray(), TRUE);
     }
 }
 ?>

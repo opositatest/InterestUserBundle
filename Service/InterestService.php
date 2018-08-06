@@ -23,14 +23,14 @@ class InterestService {
      *
      * @param Interest $interest
      * @param $user
-     * @param string $followMode
+     * @param string $followMode - by default: "followInterest"
      * @param bool $flush
      * @return bool
      */
     public function postInterestUser(Interest $interest, $user, $followMode = self::FOLLOW_INTEREST, $flush = false) {
         $done = false;
 
-        if ($followMode == null) {
+        if ($followMode == null || ($followMode != self::FOLLOW_INTEREST && $followMode != self::UNFOLLOW_INTEREST)) {
             $followMode = self::FOLLOW_INTEREST;
         }
         if ($followMode == self::FOLLOW_INTEREST) {
@@ -57,14 +57,14 @@ class InterestService {
      *
      * @param Interest $interest
      * @param $user
-     * @param string $followMode
+     * @param string $followMode - by default: "followInterest"
      * @param bool $flush
      * @return bool
      */
     public function deleteInterestUser(Interest $interest, $user, $followMode = self::FOLLOW_INTEREST, $flush = false) {
         $done = false;
 
-        if ($followMode == null) {
+        if ($followMode == null || ($followMode != self::FOLLOW_INTEREST && $followMode != self::UNFOLLOW_INTEREST)) {
             $followMode = self::FOLLOW_INTEREST;
         }
         if ($followMode == self::FOLLOW_INTEREST) {
