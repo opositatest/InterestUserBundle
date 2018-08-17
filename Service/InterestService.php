@@ -57,7 +57,7 @@ class InterestService {
         if ($flush) {
             $this->em->flush();
         }
-
+        
         return $done;
     }
 

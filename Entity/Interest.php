@@ -8,6 +8,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="Opositatest\InterestUserBundle\Repository\InterestRepository")
+ * @ORM\HasLifecycleCallbacks()
  * @ORM\Table(name="opositatest_interestuser_interest")
  */
 class Interest {
@@ -18,6 +19,17 @@ class Interest {
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Interest", inversedBy="children")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+     */
+    private $parent;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Interest", mappedBy="parent")
+     */
+    private $children;
 
     /**
      * @Groups({"interestUserView"})
@@ -37,6 +49,14 @@ class Interest {
      */
     private $unfollowUsers;
 
+    /**
+     * @ORM\PrePersist
+     */
+    public function setCreatedAtValue()
+    {
+        $this->createdAt = new \DateTime();
+    }
+
     public function __toString()
     {
         return (string) $this->getName();
@@ -49,6 +69,7 @@ class Interest {
     {
         $this->followUsers = new \Doctrine\Common\Collections\ArrayCollection();
         $this->unfollowUsers = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->children = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -179,5 +200,65 @@ class Interest {
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set parent.
+     *
+     * @param \Opositatest\InterestUserBundle\Entity\Interest|null $parent
+     *
+     * @return Interest
+     */
+    public function setParent(\Opositatest\InterestUserBundle\Entity\Interest $parent = null)
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * Get parent.
+     *
+     * @return \Opositatest\InterestUserBundle\Entity\Interest|null
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * Add child.
+     *
+     * @param \Opositatest\InterestUserBundle\Entity\Interest $child
+     *
+     * @return Interest
+     */
+    public function addChild(\Opositatest\InterestUserBundle\Entity\Interest $child)
+    {
+        $this->children[] = $child;
+
+        return $this;
+    }
+
+    /**
+     * Remove child.
+     *
+     * @param \Opositatest\InterestUserBundle\Entity\Interest $child
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeChild(\Opositatest\InterestUserBundle\Entity\Interest $child)
+    {
+        return $this->children->removeElement($child);
+    }
+
+    /**
+     * Get children.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getChildren()
+    {
+        return $this->children;
     }
 }

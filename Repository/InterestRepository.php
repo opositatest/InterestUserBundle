@@ -1,6 +1,7 @@
 <?php
 
 namespace Opositatest\InterestUserBundle\Repository;
+use Opositatest\InterestUserBundle\Entity\Interest;
 
 /**
  * InterestRepository
@@ -10,4 +11,15 @@ namespace Opositatest\InterestUserBundle\Repository;
  */
 class InterestRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getAllChildren(Interest $interest) {
+        $children = array();
+        if (count($interest->getChildren()->toArray()) == 0) {
+            return array($interest);
+        } else {
+            foreach($interest->getChildren() as $child) {
+                array_merge($children, $this->getAllChildren($interest));
+            }
+        }
+        return $children;
+    }
 }
