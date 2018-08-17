@@ -17,6 +17,12 @@ class InterestAdmin extends AbstractAdmin
             ->add('name', null, [
                 'label' => 'Nombre'
             ])
+            ->add('parent', null, [
+                'label' => 'Interés Padre'
+            ])
+            ->add('children', null, [
+                'label' => 'Intereses Hijo'
+            ])
         ;
     }
 
@@ -25,6 +31,9 @@ class InterestAdmin extends AbstractAdmin
         $datagridMapper->add('id');
         $datagridMapper->add('name', null, [
             'label' => 'Nombre'
+        ]);
+        $datagridMapper->add('parent', null, [
+            'label' => 'Interés Padre'
         ]);
     }
 
@@ -36,6 +45,12 @@ class InterestAdmin extends AbstractAdmin
             ])
             ->addIdentifier('name', null, [
                 'label' => 'Nombre'
+            ])
+            ->add('parent', null, [
+                'label' => 'Interés Padre'
+            ])
+            ->add('children', null, [
+                'label' => 'Intereses Hijo'
             ])
         ;
     }
