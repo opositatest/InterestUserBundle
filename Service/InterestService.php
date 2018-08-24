@@ -28,32 +28,31 @@ class InterestService {
      * @return bool
      */
     public function postInterestUser(Interest $interest, $user, $followMode = self::FOLLOW_INTEREST, $flush = false) {
+        /** @var UserTrait $user */
         $done = false;
 
         if ($followMode == null || ($followMode != self::FOLLOW_INTEREST && $followMode != self::UNFOLLOW_INTEREST)) {
             $followMode = self::FOLLOW_INTEREST;
         }
         if ($followMode == self::FOLLOW_INTEREST) {
-            if ($user != null && !$interest->existFollowUser($user)) {
-                $interest->addFollowUser($user);
-                // Remove unfollowUser if exists
-                if ($interest->existUnfollowUser($user)) {
-                    $interest->removeUnfollowUser($user);
+            if ($interest != null && !$user->existFollowInterest($interest)) {
+                $user->addFollowInterest($interest);
+                if ($user->exitUnfollowInterest($interest)) {
+                    $user->removeUnfollowInterest($interest);
                 }
                 $done = true;
             }
         } else {
-            if ($user != null && !$interest->existUnfollowUser($user)) {
-                $interest->addUnfollowUser($user);
-                // Remove followUser if exists
-                if ($interest->existFollowUser($user)) {
-                    $interest->removeFollowUser($user);
+            if ($interest != null && !$user->exitUnfollowInterest($interest)) {
+                $user->addUnfollowInterest($interest);
+                if ($user->existFollowInterest($interest)) {
+                    $user->removeFollowInterest($interest);
                 }
                 $done = true;
             }
         }
 
-        $this->em->persist($interest);
+        $this->em->persist($user);
         if ($flush) {
             $this->em->flush();
         }
@@ -71,21 +70,22 @@ class InterestService {
      * @return bool
      */
     public function deleteInterestUser(Interest $interest, $user, $followMode = self::FOLLOW_INTEREST, $flush = false) {
+        /** @var UserTrait $user */
         $done = false;
 
         if ($followMode == null || ($followMode != self::FOLLOW_INTEREST && $followMode != self::UNFOLLOW_INTEREST)) {
             $followMode = self::FOLLOW_INTEREST;
         }
         if ($followMode == self::FOLLOW_INTEREST) {
-            if ($user != null && $interest->existFollowUser($user)) {
-                $done = $interest->removeFollowUser($user);
+            if ($interest != null && $user->existFollowInterest($interest)) {
+                $done = $user->removeFollowInterest($interest);
             }
         } else {
-            if ($user != null && $interest->existUnfollowUser($user)) {
-                $done = $interest->removeUnfollowUser($user);
+            if ($interest != null && $user->exitUnfollowInterest($interest)) {
+                $done = $user->removeUnfollowInterest($interest);
             }
         }
-        $this->em->persist($interest);
+        $this->em->persist($user);
         if ($flush) {
             $this->em->flush();
         }

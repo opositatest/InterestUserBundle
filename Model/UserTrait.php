@@ -36,7 +36,9 @@ trait UserTrait
         $followInterest->addFollowUser($this);
         $this->followInterests[] = $followInterest;
         foreach($followInterest->getChildren() as $child) {
-            $this->addFollowInterest($child);
+            if (!$this->existFollowInterest($child)) {
+                $this->addFollowInterest($child);
+            }
         }
         return $this;
     }
@@ -48,8 +50,11 @@ trait UserTrait
         $followInterest->removeFollowUser($this);
         $this->followInterests->removeElement($followInterest);
         foreach($followInterest->getChildren() as $child) {
-            $this->removeFollowInterest($child);
+            if ($this->existFollowInterest($child)) {
+                $this->removeFollowInterest($child);
+            }
         }
+        return true;
     }
 
     /**
@@ -67,7 +72,9 @@ trait UserTrait
         $unfollowInterest->addUnfollowUser($this);
         $this->unfollowInterests[] = $unfollowInterest;
         foreach($unfollowInterest->getChildren() as $child) {
-            $this->addUnfollowInterest($child);
+            if (!$this->exitUnfollowInterest($child)) {
+                $this->addUnfollowInterest($child);
+            }
         }
         return $this;
     }
@@ -79,8 +86,11 @@ trait UserTrait
         $unfollowInterest->removeUnfollowUser($this);
         $this->unfollowInterests->removeElement($unfollowInterest);
         foreach($unfollowInterest->getChildren() as $child) {
-            $this->removeUnfollowInterest($child);
+            if ($this->exitUnfollowInterest($child)) {
+                $this->removeUnfollowInterest($child);
+            }
         }
+        return true;
     }
 
     /**
