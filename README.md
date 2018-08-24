@@ -147,3 +147,16 @@ You can try unit test with:
 ```
 ./vendor/bin/phpunit vendor/opositatest/interest-user-bundle/Opositatest/InterestUserBundle
 ```
+
+# Información adicional
+
+El bundle gestiona los intereses de un usuario, permite añadir y eliminar followInterest y unfollowInterest.
+
+Tiene dos lógicas importantes implementadas:
+1. Cuando añades un nuevo interés en followInterest o unfollowInterest el sistema añade los intereses hijo automáticamente. 
+Este proceso se hace a través de la Entidad Interest en el caso de que se use SonataAdmin y en el servicio InterestService en el caso de que
+se use la API. Esta diferenciación es así porque a través de la API necesitamos comprobar el punto 2, mientras que a través de Sonata el punto 2
+ya se comprueba con una función especial en el propio Sonata.
+
+2. No puede haber un mismo interés en followInterest y unfollowInterest, por tanto, en Sonata se comprueba a través de una función de validación, y en 
+la API se hace cada vez que se incorpora un nuevo interés.

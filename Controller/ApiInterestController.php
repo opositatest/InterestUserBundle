@@ -52,7 +52,7 @@ class ApiInterestController extends Controller {
 
         /** @var InterestService $interestService */
         $interestService = $this->get('interestUser.interest');
-        $success = $interestService->postInterestUser(
+        $success = $interestService->postInterestUserRecursiveChildren(
             $interest,
             $user,
             $request->get('followMode'),
@@ -98,7 +98,7 @@ class ApiInterestController extends Controller {
 
         /** @var InterestService $interestService */
         $interestService = $this->get('interestUser.interest');
-        $success = $interestService->deleteInterestUser(
+        $success = $interestService->deleteInterestUserRecursiveChildren(
             $interest,
             $user,
             $request->get('followMode'),

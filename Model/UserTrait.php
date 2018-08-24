@@ -32,28 +32,34 @@ trait UserTrait
      * @param \Opositatest\InterestUserBundle\Entity\Interest $followInterest
      * @return $this
      */
-    public function addFollowInterest(\Opositatest\InterestUserBundle\Entity\Interest $followInterest) {
+    public function addFollowInterest(\Opositatest\InterestUserBundle\Entity\Interest $followInterest, $includeChildren = true) {
         $followInterest->addFollowUser($this);
         $this->followInterests[] = $followInterest;
-        foreach($followInterest->getChildren() as $child) {
-            if (!$this->existFollowInterest($child)) {
-                $this->addFollowInterest($child);
+        if ($includeChildren) {
+            foreach($followInterest->getChildren() as $child) {
+                if (!$this->existFollowInterest($child)) {
+                    $this->addFollowInterest($child, $includeChildren);
+                }
             }
         }
+
         return $this;
     }
 
     /**
      * @param \Opositatest\InterestUserBundle\Entity\Interest $followInterest
      */
-    public function removeFollowInterest(\Opositatest\InterestUserBundle\Entity\Interest $followInterest) {
+    public function removeFollowInterest(\Opositatest\InterestUserBundle\Entity\Interest $followInterest, $includeChildren = true) {
         $followInterest->removeFollowUser($this);
         $this->followInterests->removeElement($followInterest);
-        foreach($followInterest->getChildren() as $child) {
-            if ($this->existFollowInterest($child)) {
-                $this->removeFollowInterest($child);
+        if ($includeChildren) {
+            foreach($followInterest->getChildren() as $child) {
+                if ($this->existFollowInterest($child)) {
+                    $this->removeFollowInterest($child, $includeChildren);
+                }
             }
         }
+
         return true;
     }
 
@@ -68,12 +74,14 @@ trait UserTrait
      * @param \Opositatest\InterestUserBundle\Entity\Interest $unfollowInterest
      * @return $this
      */
-    public function addUnfollowInterest(\Opositatest\InterestUserBundle\Entity\Interest $unfollowInterest) {
+    public function addUnfollowInterest(\Opositatest\InterestUserBundle\Entity\Interest $unfollowInterest, $includeChildren = true) {
         $unfollowInterest->addUnfollowUser($this);
         $this->unfollowInterests[] = $unfollowInterest;
-        foreach($unfollowInterest->getChildren() as $child) {
-            if (!$this->exitUnfollowInterest($child)) {
-                $this->addUnfollowInterest($child);
+        if ($includeChildren) {
+            foreach($unfollowInterest->getChildren() as $child) {
+                if (!$this->exitUnfollowInterest($child)) {
+                    $this->addUnfollowInterest($child, $includeChildren);
+                }
             }
         }
         return $this;
@@ -82,12 +90,14 @@ trait UserTrait
     /**
      * @param \Opositatest\InterestUserBundle\Entity\Interest $unfollowInterest
      */
-    public function removeUnfollowInterest(\Opositatest\InterestUserBundle\Entity\Interest $unfollowInterest) {
+    public function removeUnfollowInterest(\Opositatest\InterestUserBundle\Entity\Interest $unfollowInterest, $includeChildren = true) {
         $unfollowInterest->removeUnfollowUser($this);
         $this->unfollowInterests->removeElement($unfollowInterest);
-        foreach($unfollowInterest->getChildren() as $child) {
-            if ($this->exitUnfollowInterest($child)) {
-                $this->removeUnfollowInterest($child);
+        if ($includeChildren) {
+            foreach($unfollowInterest->getChildren() as $child) {
+                if ($this->exitUnfollowInterest($child)) {
+                    $this->removeUnfollowInterest($child, $includeChildren);
+                }
             }
         }
         return true;

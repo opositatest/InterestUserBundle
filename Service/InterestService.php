@@ -19,6 +19,40 @@ class InterestService {
     }
 
     /**
+     * Add interests with recursive for children
+     *
+     * @param Interest $interest
+     * @param $user
+     * @param string $followMode
+     * @param bool $flush
+     * @return bool
+     */
+    public function postInterestUserRecursiveChildren(Interest $interest, $user, $followMode = self::FOLLOW_INTEREST, $flush = false) {
+        $done = $this->postInterestUser($interest, $user, $followMode, $flush);
+        foreach($interest->getChildren() as $child) {
+            $this->postInterestUserRecursiveChildren($child, $user, $followMode, $flush);
+        }
+        return $done;
+    }
+
+    /**
+     * Remove interests with recursive for children
+     *
+     * @param Interest $interest
+     * @param $user
+     * @param string $followMode
+     * @param bool $flush
+     * @return bool
+     */
+    public function deleteInterestUserRecursiveChildren(Interest $interest, $user, $followMode = self::FOLLOW_INTEREST, $flush = false) {
+        $done = $this->deleteInterestUser($interest, $user, $followMode, $flush);
+        foreach($interest->getChildren() as $child) {
+            $this->deleteInterestUserRecursiveChildren($child, $user, $followMode, $flush);
+        }
+        return $done;
+    }
+
+    /**
      * Add Interest to User
      *
      * @param Interest $interest
@@ -27,7 +61,7 @@ class InterestService {
      * @param bool $flush
      * @return bool
      */
-    public function postInterestUser(Interest $interest, $user, $followMode = self::FOLLOW_INTEREST, $flush = false) {
+    public function postInterestUser(Interest $interest, $user, $followMode = self::FOLLOW_INTEREST, $flush = false, $includeEntityRecursively = false) {
         /** @var UserTrait $user */
         $done = false;
 
@@ -36,17 +70,17 @@ class InterestService {
         }
         if ($followMode == self::FOLLOW_INTEREST) {
             if ($interest != null && !$user->existFollowInterest($interest)) {
-                $user->addFollowInterest($interest);
+                $user->addFollowInterest($interest, $includeEntityRecursively);
                 if ($user->exitUnfollowInterest($interest)) {
-                    $user->removeUnfollowInterest($interest);
+                    $user->removeUnfollowInterest($interest, $includeEntityRecursively);
                 }
                 $done = true;
             }
         } else {
             if ($interest != null && !$user->exitUnfollowInterest($interest)) {
-                $user->addUnfollowInterest($interest);
+                $user->addUnfollowInterest($interest, $includeEntityRecursively);
                 if ($user->existFollowInterest($interest)) {
-                    $user->removeFollowInterest($interest);
+                    $user->removeFollowInterest($interest, $includeEntityRecursively);
                 }
                 $done = true;
             }
@@ -69,7 +103,7 @@ class InterestService {
      * @param bool $flush
      * @return bool
      */
-    public function deleteInterestUser(Interest $interest, $user, $followMode = self::FOLLOW_INTEREST, $flush = false) {
+    public function deleteInterestUser(Interest $interest, $user, $followMode = self::FOLLOW_INTEREST, $flush = false, $includeEntityRecursively = false) {
         /** @var UserTrait $user */
         $done = false;
 
@@ -78,11 +112,11 @@ class InterestService {
         }
         if ($followMode == self::FOLLOW_INTEREST) {
             if ($interest != null && $user->existFollowInterest($interest)) {
-                $done = $user->removeFollowInterest($interest);
+                $done = $user->removeFollowInterest($interest, $includeEntityRecursively);
             }
         } else {
             if ($interest != null && $user->exitUnfollowInterest($interest)) {
-                $done = $user->removeUnfollowInterest($interest);
+                $done = $user->removeUnfollowInterest($interest, $includeEntityRecursively);
             }
         }
         $this->em->persist($user);
