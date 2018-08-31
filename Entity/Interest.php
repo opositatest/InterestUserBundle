@@ -23,6 +23,7 @@ class Interest {
     /**
      * @ORM\ManyToOne(targetEntity="Interest", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+     * @Groups({"interestUserView"})
      */
     private $parent;
 
