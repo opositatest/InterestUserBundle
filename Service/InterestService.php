@@ -25,12 +25,13 @@ class InterestService {
      * @param $user
      * @param string $followMode
      * @param bool $flush
+     * @param $blockBased
      * @return bool
      */
-    public function postInterestUserRecursiveChildren(Interest $interest, $user, $followMode = self::FOLLOW_INTEREST, $flush = false) {
-        $done = $this->postInterestUser($interest, $user, $followMode, $flush);
+    public function postInterestUserRecursiveChildren(Interest $interest, $user, $followMode = self::FOLLOW_INTEREST, $flush = false, $blockBased = false) {
+        $done = $this->postInterestUser($interest, $user, $followMode, $flush, $blockBased);
         foreach($interest->getChildren() as $child) {
-            $this->postInterestUserRecursiveChildren($child, $user, $followMode, $flush);
+            $this->postInterestUserRecursiveChildren($child, $user, $followMode, $flush, $blockBased);
         }
         return $done;
     }
@@ -59,9 +60,10 @@ class InterestService {
      * @param $user
      * @param string $followMode - by default: "followInterest"
      * @param bool $flush
+     * @param $blockBased
      * @return bool
      */
-    public function postInterestUser(Interest $interest, $user, $followMode = self::FOLLOW_INTEREST, $flush = false, $includeEntityRecursively = false) {
+    public function postInterestUser(Interest $interest, $user, $followMode = self::FOLLOW_INTEREST, $flush = false, $includeEntityRecursively = false, $blockBased = false) {
         /** @var UserTrait $user */
         $done = false;
 
@@ -70,19 +72,23 @@ class InterestService {
         }
         if ($followMode == self::FOLLOW_INTEREST) {
             if ($interest != null && !$user->existFollowInterest($interest)) {
-                $user->addFollowInterest($interest, $includeEntityRecursively);
-                if ($user->exitUnfollowInterest($interest)) {
-                    $user->removeUnfollowInterest($interest, $includeEntityRecursively);
+                if (!$blockBased || !$user->exitUnfollowInterest($interest)) {
+                    $user->addFollowInterest($interest, $includeEntityRecursively);
+                    if ($user->exitUnfollowInterest($interest)) {
+                        $user->removeUnfollowInterest($interest, $includeEntityRecursively);
+                    }
+                    $done = true;
                 }
-                $done = true;
             }
         } else {
             if ($interest != null && !$user->exitUnfollowInterest($interest)) {
-                $user->addUnfollowInterest($interest, $includeEntityRecursively);
-                if ($user->existFollowInterest($interest)) {
-                    $user->removeFollowInterest($interest, $includeEntityRecursively);
+                if (!$blockBased || $user->existFollowInterest($interest)) {
+                    $user->addUnfollowInterest($interest, $includeEntityRecursively);
+                    if ($user->existFollowInterest($interest)) {
+                        $user->removeFollowInterest($interest, $includeEntityRecursively);
+                    }
+                    $done = true;
                 }
-                $done = true;
             }
         }
 

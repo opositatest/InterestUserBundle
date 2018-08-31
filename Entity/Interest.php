@@ -235,6 +235,10 @@ class Interest {
      */
     public function addChild(\Opositatest\InterestUserBundle\Entity\Interest $child)
     {
+        // Not add child for self
+        if ($child->getId() == $this->getId()) {
+            return $this;
+        }
         $this->children[] = $child;
 
         return $this;
