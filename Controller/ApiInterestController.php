@@ -28,6 +28,8 @@ class ApiInterestController extends Controller {
      *         name="followMode",
      *         in="query",
      *         description="followInterest or unfollowInterest",
+     *         enum={"followInterest", "unfollowInterest"},
+     *         default="followInterest",
      *         required=false,
      *         type="string"
      *     ),
@@ -35,7 +37,9 @@ class ApiInterestController extends Controller {
      *         name="blockBase",
      *         in="query",
      *         description="indicates if you can process the request even if there is a denied interest",
-     *         type="boolean"
+     *         type="integer",
+     *         default="0",
+     *         enum={0,1}
      *     ),
      *     @SWG\Response(
      *         response="204",
@@ -63,7 +67,8 @@ class ApiInterestController extends Controller {
             $user,
             $request->get('followMode'),
             true,
-            $request->get('blockBase'));
+            $request->get('blockBase')
+        );
 
         return new JsonResponse($success);
     }
@@ -81,6 +86,8 @@ class ApiInterestController extends Controller {
      *         name="followMode",
      *         in="query",
      *         description="followInterest or unfollowInterest  ",
+     *         enum={"followInterest", "unfollowInterest"},
+     *         default="followInterest",
      *         required=false,
      *         type="string"
      *     ),

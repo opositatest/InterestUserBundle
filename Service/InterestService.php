@@ -29,6 +29,9 @@ class InterestService {
      * @return bool
      */
     public function postInterestUserRecursiveChildren(Interest $interest, $user, $followMode = self::FOLLOW_INTEREST, $flush = false, $blockBased = false) {
+        if ($blockBased == null) {
+            $blockBased = 0;
+        }
         $done = $this->postInterestUser($interest, $user, $followMode, $flush, false, $blockBased);
         foreach($interest->getChildren() as $child) {
             $this->postInterestUserRecursiveChildren($child, $user, $followMode, $flush, $blockBased);
@@ -82,7 +85,7 @@ class InterestService {
             }
         } else {
             if ($interest != null && !$user->existUnfollowInterest($interest)) {
-                if (!$blockBased || $user->existFollowInterest($interest)) {
+                if (!$blockBased || !$user->existFollowInterest($interest)) {
                     $user->addUnfollowInterest($interest, $includeEntityRecursively);
                     if ($user->existFollowInterest($interest)) {
                         $user->removeFollowInterest($interest, $includeEntityRecursively);
