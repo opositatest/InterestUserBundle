@@ -29,7 +29,7 @@ class InterestService {
      * @return bool
      */
     public function postInterestUserRecursiveChildren(Interest $interest, $user, $followMode = self::FOLLOW_INTEREST, $flush = false, $blockBased = false) {
-        $done = $this->postInterestUser($interest, $user, $followMode, $flush, $blockBased);
+        $done = $this->postInterestUser($interest, $user, $followMode, $flush, false, $blockBased);
         foreach($interest->getChildren() as $child) {
             $this->postInterestUserRecursiveChildren($child, $user, $followMode, $flush, $blockBased);
         }
@@ -72,16 +72,16 @@ class InterestService {
         }
         if ($followMode == self::FOLLOW_INTEREST) {
             if ($interest != null && !$user->existFollowInterest($interest)) {
-                if (!$blockBased || !$user->exitUnfollowInterest($interest)) {
+                if (!$blockBased || !$user->existUnfollowInterest($interest)) {
                     $user->addFollowInterest($interest, $includeEntityRecursively);
-                    if ($user->exitUnfollowInterest($interest)) {
+                    if ($user->existUnfollowInterest($interest)) {
                         $user->removeUnfollowInterest($interest, $includeEntityRecursively);
                     }
                     $done = true;
                 }
             }
         } else {
-            if ($interest != null && !$user->exitUnfollowInterest($interest)) {
+            if ($interest != null && !$user->existUnfollowInterest($interest)) {
                 if (!$blockBased || $user->existFollowInterest($interest)) {
                     $user->addUnfollowInterest($interest, $includeEntityRecursively);
                     if ($user->existFollowInterest($interest)) {
@@ -121,7 +121,7 @@ class InterestService {
                 $done = $user->removeFollowInterest($interest, $includeEntityRecursively);
             }
         } else {
-            if ($interest != null && $user->exitUnfollowInterest($interest)) {
+            if ($interest != null && $user->existUnfollowInterest($interest)) {
                 $done = $user->removeUnfollowInterest($interest, $includeEntityRecursively);
             }
         }

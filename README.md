@@ -54,7 +54,7 @@ Add validate function, so:
         /** @var SyliusUser $user */
         $user = $object;
         foreach($user->getFollowInterests() as $followInterest) {
-            if ($user->exitUnfollowInterest($followInterest)) {
+            if ($user->existUnfollowInterest($followInterest)) {
                 $custom_error = "Interest ".$followInterest." used in follow and unfollow";
                 $errorElement->with( 'enabled' )->addViolation( $custom_error )->end();
             }

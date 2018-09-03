@@ -79,7 +79,7 @@ trait UserTrait
         $this->unfollowInterests[] = $unfollowInterest;
         if ($includeChildren) {
             foreach($unfollowInterest->getChildren() as $child) {
-                if (!$this->exitUnfollowInterest($child)) {
+                if (!$this->existUnfollowInterest($child)) {
                     $this->addUnfollowInterest($child, $includeChildren);
                 }
             }
@@ -95,7 +95,7 @@ trait UserTrait
         $this->unfollowInterests->removeElement($unfollowInterest);
         if ($includeChildren) {
             foreach($unfollowInterest->getChildren() as $child) {
-                if ($this->exitUnfollowInterest($child)) {
+                if ($this->existUnfollowInterest($child)) {
                     $this->removeUnfollowInterest($child, $includeChildren);
                 }
             }
@@ -126,7 +126,7 @@ trait UserTrait
      * @param Interest $unfollowInterest
      * @return bool
      */
-    public function exitUnfollowInterest(Interest $unfollowInterest) {
+    public function existUnfollowInterest(Interest $unfollowInterest) {
         return in_array($unfollowInterest, $this->getUnfollowInterests()->toArray(), TRUE);
     }
 }

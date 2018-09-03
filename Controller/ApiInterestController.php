@@ -31,6 +31,12 @@ class ApiInterestController extends Controller {
      *         required=false,
      *         type="string"
      *     ),
+     *     @SWG\Parameter(
+     *         name="blockBase",
+     *         in="query",
+     *         description="indicates if you can process the request even if there is a denied interest",
+     *         type="boolean"
+     *     ),
      *     @SWG\Response(
      *         response="204",
      *         description="Returned when is added InterestUser successfully"
@@ -56,7 +62,8 @@ class ApiInterestController extends Controller {
             $interest,
             $user,
             $request->get('followMode'),
-            true);
+            true,
+            $request->get('blockBase'));
 
         return new JsonResponse($success);
     }
