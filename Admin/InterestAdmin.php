@@ -20,9 +20,10 @@ class InterestAdmin extends AbstractAdmin
             ->add('parent', null, [
                 'label' => 'Interés Padre'
             ])
-            ->add('children', null, [
-                'label' => 'Intereses Hijo'
-            ])
+            ->add('children', 'sonata_type_model', [
+                'label' => 'Intereses Hijo', 'multiple' => true, 'by_reference' => false
+                ], array('hide-select-from-table' => true)
+            )
         ;
     }
 

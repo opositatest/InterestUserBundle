@@ -212,6 +212,11 @@ class Interest {
      */
     public function setParent(\Opositatest\InterestUserBundle\Entity\Interest $parent = null)
     {
+        if ($parent != null) {
+            if ($parent->getId() == $this->getId()) {
+                return $this;
+            }
+        }
         $this->parent = $parent;
 
         return $this;
@@ -241,6 +246,7 @@ class Interest {
             return $this;
         }
         $this->children[] = $child;
+        $child->setParent($this);
 
         return $this;
     }
@@ -254,6 +260,7 @@ class Interest {
      */
     public function removeChild(\Opositatest\InterestUserBundle\Entity\Interest $child)
     {
+        $child->setParent(null);
         return $this->children->removeElement($child);
     }
 
