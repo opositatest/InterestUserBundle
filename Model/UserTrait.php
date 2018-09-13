@@ -90,11 +90,16 @@ trait UserTrait
                 }
             }
         }
+        if ($this->isLastChild($unfollowInterest)) {
+            $this->removeFollowInterest($unfollowInterest->getParent(), false);
+            $this->addUnfollowInterest($unfollowInterest->getParent(), false);
+        }
         return $this;
     }
 
     /**
      * @param \Opositatest\InterestUserBundle\Entity\Interest $unfollowInterest
+     * @return bool
      */
     public function removeUnfollowInterest(\Opositatest\InterestUserBundle\Entity\Interest $unfollowInterest, $includeChildren = true) {
         $unfollowInterest->removeUnfollowUser($this);
@@ -134,6 +139,28 @@ trait UserTrait
      */
     public function existUnfollowInterest(Interest $unfollowInterest) {
         return in_array($unfollowInterest, $this->getUnfollowInterests()->toArray(), TRUE);
+    }
+
+    /**
+     * @param Interest $interest
+     */
+    private function isLastChild($interest)
+    {
+        $parent = $interest->getParent();
+
+        if (!$parent or $this->existUnfollowInterest($parent)) {
+            $result = false;
+        } else {
+            $result = true;
+            foreach ($parent->getChildren() as $child) {
+                if ($child != $interest and $this->existFollowInterest($child)) {
+                    $result = false;
+                }
+            }
+        }
+
+        return $result;
+
     }
 }
 ?>
