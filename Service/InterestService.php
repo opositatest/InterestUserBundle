@@ -25,16 +25,22 @@ class InterestService {
      * @param $user
      * @param string $followMode
      * @param bool $flush
-     * @param $blockBased
+     * @param bool $blockBased
+     * @param bool $recursive
      * @return bool
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function postInterestUserRecursiveChildren(Interest $interest, $user, $followMode = self::FOLLOW_INTEREST, $flush = false, $blockBased = false) {
+    public function postInterestUserRecursiveChildren(Interest $interest, $user, $followMode = self::FOLLOW_INTEREST, $flush = false, $blockBased = false, $recursive = false) {
         if ($blockBased == null) {
             $blockBased = 0;
         }
-        $done = $this->postInterestUser($interest, $user, $followMode, $flush, false, $blockBased);
-        foreach($interest->getChildren() as $child) {
-            $this->postInterestUserRecursiveChildren($child, $user, $followMode, $flush, $blockBased);
+        $done = $this->postInterestUser($interest, $user, $followMode, $flush, $recursive, $blockBased);
+
+        if($recursive) {
+            foreach($interest->getChildren() as $child) {
+                $this->postInterestUserRecursiveChildren($child, $user, $followMode, $flush, $blockBased);
+            }
         }
         return $done;
     }
@@ -46,12 +52,17 @@ class InterestService {
      * @param $user
      * @param string $followMode
      * @param bool $flush
+     * @param bool $recursive
      * @return bool
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function deleteInterestUserRecursiveChildren(Interest $interest, $user, $followMode = self::FOLLOW_INTEREST, $flush = false) {
+    public function deleteInterestUserRecursiveChildren(Interest $interest, $user, $followMode = self::FOLLOW_INTEREST, $flush = false, $recursive = false) {
         $done = $this->deleteInterestUser($interest, $user, $followMode, $flush);
-        foreach($interest->getChildren() as $child) {
-            $this->deleteInterestUserRecursiveChildren($child, $user, $followMode, $flush);
+        if($recursive) {
+            foreach($interest->getChildren() as $child) {
+                $this->deleteInterestUserRecursiveChildren($child, $user, $followMode, $flush);
+            }
         }
         return $done;
     }
@@ -63,8 +74,11 @@ class InterestService {
      * @param $user
      * @param string $followMode - by default: "followInterest"
      * @param bool $flush
-     * @param $blockBased
+     * @param bool $includeEntityRecursively
+     * @param bool $blockBased
      * @return bool
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function postInterestUser(Interest $interest, $user, $followMode = self::FOLLOW_INTEREST, $flush = false, $includeEntityRecursively = false, $blockBased = false) {
         /** @var UserTrait $user */
@@ -99,7 +113,7 @@ class InterestService {
         if ($flush) {
             $this->em->flush();
         }
-        
+
         return $done;
     }
 
@@ -110,7 +124,10 @@ class InterestService {
      * @param $user
      * @param string $followMode - by default: "followInterest"
      * @param bool $flush
+     * @param bool $includeEntityRecursively
      * @return bool
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function deleteInterestUser(Interest $interest, $user, $followMode = self::FOLLOW_INTEREST, $flush = false, $includeEntityRecursively = false) {
         /** @var UserTrait $user */

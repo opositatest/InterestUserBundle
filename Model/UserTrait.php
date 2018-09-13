@@ -33,6 +33,7 @@ trait UserTrait
      * @return $this
      */
     public function addFollowInterest(\Opositatest\InterestUserBundle\Entity\Interest $followInterest, $includeChildren = true) {
+
         $followInterest->addFollowUser($this);
         $this->followInterests[] = $followInterest;
         if ($includeChildren) {
@@ -42,12 +43,17 @@ trait UserTrait
                 }
             }
         }
+        $parent = $followInterest->getParent();
+        if ($parent) {
+            $this->addFollowInterest($parent, false);
+        }
 
         return $this;
     }
 
     /**
      * @param \Opositatest\InterestUserBundle\Entity\Interest $followInterest
+     * @return bool
      */
     public function removeFollowInterest(\Opositatest\InterestUserBundle\Entity\Interest $followInterest, $includeChildren = true) {
         $followInterest->removeFollowUser($this);

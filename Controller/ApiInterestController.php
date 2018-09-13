@@ -67,7 +67,8 @@ class ApiInterestController extends Controller {
             $user,
             $request->get('followMode'),
             true,
-            $request->get('blockBase')
+            $request->get('blockBase'),
+            $request->get('recursive')
         );
 
         return new JsonResponse($success);
