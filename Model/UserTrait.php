@@ -45,6 +45,9 @@ trait UserTrait
         }
         $parent = $followInterest->getParent();
         if ($parent and !$this->existFollowInterest($parent)) {
+            if($this->existUnfollowInterest($parent)) {
+                $this->removeUnfollowInterest($parent, false);
+            }
             $this->addFollowInterest($parent, false);
         }
 
