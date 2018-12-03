@@ -2,6 +2,7 @@
 namespace Opositatest\InterestUserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+
 use Opositatest\InterestUserBundle\Model\UserInterface;
 use Opositatest\InterestUserBundle\Model\UserTrait;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -39,14 +40,14 @@ class Interest {
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity="\Opositatest\InterestUserBundle\Model\UserInterface", inversedBy="followInterests")
-     * @ORM\JoinTable(name="opositatest_interestuser_followUsers_followInterests")
+     * @ORM\ManyToOne(targetEntity="\Opositatest\InterestUserBundle\Entity\FollowInterestUser")
+     * @ORM\JoinColumn(name="interest_id", referencedColumnName="id")
      */
     private $followUsers;
 
     /**
-     * @ORM\ManyToMany(targetEntity="\Opositatest\InterestUserBundle\Model\UserInterface", inversedBy="unfollowInterests")
-     * @ORM\JoinTable(name="opositatest_interestuser_unfollowUsers_unfollowInterests")
+     * @ORM\ManyToOne(targetEntity="\Opositatest\InterestUserBundle\Entity\UnFollowInterestUser")
+     * @ORM\JoinColumn(name="interest_id", referencedColumnName="id")
      */
     private $unfollowUsers;
 
