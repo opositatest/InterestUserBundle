@@ -155,6 +155,10 @@ class ApiInterestController extends Controller {
             'interests' => $interests
         );
 
+        /** @var UserTrait $user */
+        $user = $data['user'];
+
+
         /** @var SerializerInterface $serializer */
         $serializer = $this->get('serializer');
         $dataJson = $serializer->serialize(

@@ -9,13 +9,13 @@ trait UserTrait
 {
     /**
      * @Groups({"interestUserView"})
-     * @ORM\ManyToMany(targetEntity="\Opositatest\InterestUserBundle\Entity\Interest", mappedBy="followUsers")
+     * @ORM\OneToMany(targetEntity="\Opositatest\InterestUserBundle\Entity\FollowInterestUser", mappedBy="userinterfaceId")
      */
     private $followInterests;
 
     /**
      * @Groups({"interestUserView"})
-     * @ORM\ManyToMany(targetEntity="\Opositatest\InterestUserBundle\Entity\Interest", mappedBy="unfollowUsers")
+     * @ORM\OneToMany(targetEntity="\Opositatest\InterestUserBundle\Entity\UnFollowInterestUser", mappedBy="userinterfaceId")
      */
     private $unfollowInterests;
 

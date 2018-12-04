@@ -40,14 +40,12 @@ class Interest {
     private $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity="\Opositatest\InterestUserBundle\Entity\FollowInterestUser")
-     * @ORM\JoinColumn(name="interest_id", referencedColumnName="id")
+     * @ORM\OneToMany(targetEntity="\Opositatest\InterestUserBundle\Entity\FollowInterestUser", mappedBy="interestId")
      */
     private $followUsers;
 
     /**
-     * @ORM\ManyToOne(targetEntity="\Opositatest\InterestUserBundle\Entity\UnFollowInterestUser")
-     * @ORM\JoinColumn(name="interest_id", referencedColumnName="id")
+     * @ORM\OneToMany(targetEntity="\Opositatest\InterestUserBundle\Entity\UnFollowInterestUser", mappedBy="interestId")
      */
     private $unfollowUsers;
 
