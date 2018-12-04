@@ -1,7 +1,9 @@
 <?php
 namespace Opositatest\InterestUserBundle\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Opositatest\InterestUserBundle\Entity\FollowInterestUser;
 use Opositatest\InterestUserBundle\Entity\Interest;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -76,7 +78,12 @@ trait UserTrait
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getFollowInterests() {
-        return $this->followInterests;
+        $interests = new ArrayCollection();
+        /** @var FollowInterestUser $followedinterest */
+        foreach ($this->followInterests as $followedinterest) {
+            $interests->add($followedinterest->getInterestId());
+        }
+        return $interests;
     }
 
     /**
@@ -121,7 +128,12 @@ trait UserTrait
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getUnfollowInterests() {
-        return $this->unfollowInterests;
+        $interests = new ArrayCollection();
+        /** @var FollowInterestUser $followedinterest */
+        foreach ($this->unfollowInterests as $unfollowedinterest) {
+            $interests->add($unfollowedinterest->getInterestId());
+        }
+        return $interests;
     }
 
     /**
