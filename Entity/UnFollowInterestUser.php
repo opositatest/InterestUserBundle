@@ -22,7 +22,7 @@ class UnFollowInterestUser
 
     /**
      * @Groups({"interestUserView"})
-     * @ORM\ManyToOne(targetEntity="\Opositatest\InterestUserBundle\Entity\Interest", inversedBy="followUsers")
+     * @ORM\ManyToOne(targetEntity="\Opositatest\InterestUserBundle\Entity\Interest", inversedBy="unfollowUsers")
      * @ORM\JoinColumn(name="interest_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $interestId;
