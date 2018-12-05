@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation\Groups;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Opositatest\InterestUserBundle\Repository\UserInterestRepository")
  * @ORM\Table(name="opositatest_interestuser_unfollowUsers_unfollowInterests")
  */
 class UnFollowInterestUser

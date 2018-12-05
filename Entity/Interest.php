@@ -98,19 +98,6 @@ class Interest {
     }
 
     /**
-     * Remove followUser.
-     *
-     * @param \Opositatest\InterestUserBundle\Model\UserInterface $followUser
-     *
-     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
-     */
-    public function removeFollowUser($followUser)
-    {
-        /** @var UserTrait $followUser */
-        return $this->followUsers->removeElement($followUser);
-    }
-
-    /**
      * Get followUsers.
      *
      * @return \Doctrine\Common\Collections\Collection
@@ -118,6 +105,19 @@ class Interest {
     public function getFollowUsers()
     {
         return $this->followUsers;
+    }
+
+    /**
+     * Remove followUser.
+     *
+     * @param \Opositatest\InterestUserBundle\Entity\FollowInterestUser $followUser
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeFollowUser($followUser)
+    {
+        /** @var UserTrait $followUser */
+        return $this->followUsers->removeElement($followUser);
     }
 
     /**
@@ -148,7 +148,7 @@ class Interest {
     /**
      * Remove unfollowUser.
      *
-     * @param \Opositatest\InterestUserBundle\Model\UserInterface $unfollowUser
+     * @param \Opositatest\InterestUserBundle\Entity\UnFollowInterestUser $unfollowUser
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */

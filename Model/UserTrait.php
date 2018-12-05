@@ -49,35 +49,15 @@ trait UserTrait
                 }
             }
         }
-        $parent = $followInterest->getParent();
-        if ($parent and !$this->existFollowInterest($parent)) {
-            if($this->existUnfollowInterest($parent)) {
-                $this->removeUnfollowInterest($parent, false);
-            }
-            $this->addFollowInterest($parent, false);
-        }
-
         return $this;
     }
 
     /**
-     * @param \Opositatest\InterestUserBundle\Entity\Interest $followInterest
-     * @return bool
+     * @param $followInterestUser
+     * @return void
      */
-    public function removeFollowInterest(\Opositatest\InterestUserBundle\Entity\Interest $followInterest, $includeChildren = true) {
-
-        $followInterestUser = $this->interestToInterestUser($followInterest, new FollowInterestUser());
-        $followInterest->removeFollowUser($followInterestUser);
+    public function removeFollowInterest($followInterestUser) {
         $this->followInterests->removeElement($followInterestUser);
-        if ($includeChildren) {
-            foreach($followInterest->getChildren() as $child) {
-                if ($this->existFollowInterest($child)) {
-                    $this->removeFollowInterest($child, $includeChildren);
-                }
-            }
-        }
-
-        return true;
     }
 
     /**
@@ -108,10 +88,6 @@ trait UserTrait
                 }
             }
         }
-        if ($this->isLastChild($unfollowInterest)) {
-            $this->removeFollowInterest($unfollowInterest->getParent(), false);
-            $this->addUnfollowInterest($unfollowInterest->getParent(), false);
-        }
         return $this;
     }
 
@@ -119,18 +95,8 @@ trait UserTrait
      * @param \Opositatest\InterestUserBundle\Entity\Interest $unfollowInterest
      * @return bool
      */
-    public function removeUnfollowInterest(\Opositatest\InterestUserBundle\Entity\Interest $unfollowInterest, $includeChildren = true) {
-        $unfollowInterestUser = $this->interestToInterestUser($unfollowInterest, new UnFollowInterestUser());
-        $unfollowInterest->removeUnfollowUser($unfollowInterestUser);
+    public function removeUnfollowInterest( UnFollowInterestUser $unfollowInterestUser) {
         $this->unfollowInterests->removeElement($unfollowInterestUser);
-        if ($includeChildren) {
-            foreach($unfollowInterest->getChildren() as $child) {
-                if ($this->existUnfollowInterest($child)) {
-                    $this->removeUnfollowInterest($child, $includeChildren);
-                }
-            }
-        }
-        return true;
     }
 
     /**
@@ -166,17 +132,16 @@ trait UserTrait
     }
 
     private function interestToInterestUser(Interest $interest, $interestUser) {
-
         $interestUser->setInterestId($interest);
         $interestUser->setUserinterfaceId($this);
-
         return $interestUser;
     }
 
     /**
      * @param Interest $interest
+     * @return bool
      */
-    private function isLastChild($interest)
+    public function isLastChild($interest)
     {
         $parent = $interest->getParent();
 

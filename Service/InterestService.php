@@ -8,6 +8,7 @@ use Opositatest\InterestUserBundle\Entity\UnFollowInterestUser;
 use Opositatest\InterestUserBundle\Model\UserInterface;
 use Opositatest\InterestUserBundle\Model\UserTrait;
 use Opositatest\InterestUserBundle\Repository\InterestRepository;
+use Opositatest\InterestUserBundle\Repository\UserInterestRepository;
 
 class InterestService {
     const FOLLOW_INTEREST = "followInterest";
@@ -93,8 +94,15 @@ class InterestService {
             if ($interest != null && !$user->existFollowInterest($interest)) {
                 if (!$blockBased || !$user->existUnfollowInterest($interest)) {
                     $user->addFollowInterest($interest, $includeEntityRecursively);
+                    $parent = $interest->getParent();
+                    if ($parent and !$user->existFollowInterest($parent)) {
+                        if($user->existUnfollowInterest($parent)) {
+                            $this->removeUnfollowInterestUser($parent, $user,false);
+                        }
+                        $user->addFollowInterest($parent, false);
+                    }
                     if ($user->existUnfollowInterest($interest)) {
-                        $user->removeUnfollowInterest($interest, $includeEntityRecursively);
+                        $this->removeUnfollowInterestUser($interest, $user, $includeEntityRecursively);
                     }
                     $done = true;
                 }
@@ -103,13 +111,21 @@ class InterestService {
             if ($interest != null && !$user->existUnfollowInterest($interest)) {
                 if (!$blockBased || !$user->existFollowInterest($interest)) {
                     $user->addUnfollowInterest($interest, $includeEntityRecursively);
+                    if ($user->isLastChild($interest)) {
+                        if($user->existFollowInterest($interest->getParent())) {
+                            $this->removeFollowInterestUser($interest->getParent(), $user,false);
+                        }
+                        $user->addUnfollowInterest($interest->getParent(), false);
+                    }
                     if ($user->existFollowInterest($interest)) {
-                        $user->removeFollowInterest($interest, $includeEntityRecursively);
+                        $this->removeFollowInterestUser($interest, $user, $includeEntityRecursively);
                     }
                     $done = true;
                 }
             }
         }
+
+        //die('no persisto');
 
         $this->em->persist($user);
         if ($flush) {
@@ -165,6 +181,60 @@ class InterestService {
         $repositoryInterest = $this->em->getRepository("OpositatestInterestUserBundle:Interest");
         return $repositoryInterest->findAll();
     }
-}
 
-?>
+    /**
+     * @param \Opositatest\InterestUserBundle\Entity\Interest $unfollowInterest
+     * @return bool
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function removeUnfollowInterestUser( Interest $unfollowInterest, $user, $includeChildren = true) {
+        /** @var UserTrait $user */
+
+        /** @var UserInterestRepository $interestUserRepository */
+        $interestUserRepository = $this->em->getRepository(UnFollowInterestUser::class);
+        /** @var UnFollowInterestUser $unfollowInterestUser */
+        $unfollowInterestUser = $interestUserRepository->findOneByUserAndInterest($unfollowInterest, $user);
+
+        $user->removeUnfollowInterest($unfollowInterestUser);
+        if ($includeChildren) {
+            foreach($unfollowInterest->getChildren() as $child) {
+                if ($user->existUnfollowInterest($child)) {
+                    $this->removeUnfollowInterestUser($child, $user, $includeChildren);
+                }
+            }
+        }
+        $this->em->remove($unfollowInterestUser);
+        return true;
+    }
+
+    /**
+     * @param \Opositatest\InterestUserBundle\Entity\Interest $unfollowInterest
+     * @return bool
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function removeFollowInterestUser( Interest $unfollowInterest, $user, $includeChildren = true) {
+        /** @var UserTrait $user */
+
+        /** @var UserInterestRepository $interestUserRepository */
+        $interestUserRepository = $this->em->getRepository(FollowInterestUser::class);
+        /** @var FollowInterestUser $followInterestUser */
+        $followInterestUser = $interestUserRepository->findOneByUserAndInterest($unfollowInterest, $user);
+
+        if($followInterestUser != null) {
+            $user->removeFollowInterest($followInterestUser);
+
+            if ($includeChildren) {
+                foreach($unfollowInterest->getChildren() as $child) {
+                    if ($user->existUnfollowInterest($child)) {
+                        $this->removeFollowInterestUser($child, $user, $includeChildren);
+                    }
+                }
+            }
+            $this->em->remove($followInterestUser);
+        }
+
+        return true;
+
+    }
+
+}
