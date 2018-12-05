@@ -5,19 +5,20 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Opositatest\InterestUserBundle\Entity\FollowInterestUser;
 use Opositatest\InterestUserBundle\Entity\Interest;
+use Opositatest\InterestUserBundle\Entity\UnFollowInterestUser;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 trait UserTrait
 {
     /**
      * @Groups({"interestUserView"})
-     * @ORM\OneToMany(targetEntity="\Opositatest\InterestUserBundle\Entity\FollowInterestUser", mappedBy="userinterfaceId")
+     * @ORM\OneToMany(targetEntity="\Opositatest\InterestUserBundle\Entity\FollowInterestUser", mappedBy="userinterfaceId", cascade={"persist"})
      */
     private $followInterests;
 
     /**
      * @Groups({"interestUserView"})
-     * @ORM\OneToMany(targetEntity="\Opositatest\InterestUserBundle\Entity\UnFollowInterestUser", mappedBy="userinterfaceId")
+     * @ORM\OneToMany(targetEntity="\Opositatest\InterestUserBundle\Entity\UnFollowInterestUser", mappedBy="userinterfaceId", cascade={"persist"})
      */
     private $unfollowInterests;
 
@@ -36,8 +37,11 @@ trait UserTrait
      */
     public function addFollowInterest(\Opositatest\InterestUserBundle\Entity\Interest $followInterest, $includeChildren = true) {
 
-        $followInterest->addFollowUser($this);
-        $this->followInterests[] = $followInterest;
+        $followInterestUser = $this->interestToInterestUser($followInterest, new FollowInterestUser());
+
+        $followInterest->addFollowUser($followInterestUser);
+        $this->followInterests[] = $followInterestUser;
+
         if ($includeChildren) {
             foreach($followInterest->getChildren() as $child) {
                 if (!$this->existFollowInterest($child)) {
@@ -61,8 +65,10 @@ trait UserTrait
      * @return bool
      */
     public function removeFollowInterest(\Opositatest\InterestUserBundle\Entity\Interest $followInterest, $includeChildren = true) {
-        $followInterest->removeFollowUser($this);
-        $this->followInterests->removeElement($followInterest);
+
+        $followInterestUser = $this->interestToInterestUser($followInterest, new FollowInterestUser());
+        $followInterest->removeFollowUser($followInterestUser);
+        $this->followInterests->removeElement($followInterestUser);
         if ($includeChildren) {
             foreach($followInterest->getChildren() as $child) {
                 if ($this->existFollowInterest($child)) {
@@ -91,8 +97,10 @@ trait UserTrait
      * @return $this
      */
     public function addUnfollowInterest(\Opositatest\InterestUserBundle\Entity\Interest $unfollowInterest, $includeChildren = true) {
-        $unfollowInterest->addUnfollowUser($this);
-        $this->unfollowInterests[] = $unfollowInterest;
+        $unfollowInterestUser = $this->interestToInterestUser($unfollowInterest, new UnFollowInterestUser());
+        $unfollowInterest->addUnfollowUser($unfollowInterestUser);
+        $this->unfollowInterests[] = $unfollowInterestUser;
+
         if ($includeChildren) {
             foreach($unfollowInterest->getChildren() as $child) {
                 if (!$this->existUnfollowInterest($child)) {
@@ -112,8 +120,9 @@ trait UserTrait
      * @return bool
      */
     public function removeUnfollowInterest(\Opositatest\InterestUserBundle\Entity\Interest $unfollowInterest, $includeChildren = true) {
-        $unfollowInterest->removeUnfollowUser($this);
-        $this->unfollowInterests->removeElement($unfollowInterest);
+        $unfollowInterestUser = $this->interestToInterestUser($unfollowInterest, new UnFollowInterestUser());
+        $unfollowInterest->removeUnfollowUser($unfollowInterestUser);
+        $this->unfollowInterests->removeElement($unfollowInterestUser);
         if ($includeChildren) {
             foreach($unfollowInterest->getChildren() as $child) {
                 if ($this->existUnfollowInterest($child)) {
@@ -154,6 +163,14 @@ trait UserTrait
      */
     public function existUnfollowInterest(Interest $unfollowInterest) {
         return in_array($unfollowInterest, $this->getUnfollowInterests()->toArray(), TRUE);
+    }
+
+    private function interestToInterestUser(Interest $interest, $interestUser) {
+
+        $interestUser->setInterestId($interest);
+        $interestUser->setUserinterfaceId($this);
+
+        return $interestUser;
     }
 
     /**

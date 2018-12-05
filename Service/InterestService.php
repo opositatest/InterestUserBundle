@@ -2,7 +2,9 @@
 namespace Opositatest\InterestUserBundle\Service;
 
 use Doctrine\ORM\EntityManager;
+use Opositatest\InterestUserBundle\Entity\FollowInterestUser;
 use Opositatest\InterestUserBundle\Entity\Interest;
+use Opositatest\InterestUserBundle\Entity\UnFollowInterestUser;
 use Opositatest\InterestUserBundle\Model\UserInterface;
 use Opositatest\InterestUserBundle\Model\UserTrait;
 use Opositatest\InterestUserBundle\Repository\InterestRepository;

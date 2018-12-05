@@ -70,7 +70,6 @@ class ApiInterestController extends Controller {
             $request->get('blockBase'),
             $request->get('recursive')
         );
-
         return new JsonResponse($success);
     }
 
