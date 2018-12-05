@@ -125,8 +125,6 @@ class InterestService {
             }
         }
 
-        //die('no persisto');
-
         $this->em->persist($user);
         if ($flush) {
             $this->em->flush();
