@@ -156,11 +156,11 @@ class InterestService {
         }
         if ($followMode == self::FOLLOW_INTEREST) {
             if ($interest != null && $user->existFollowInterest($interest)) {
-                $done = $user->removeFollowInterest($interest, $includeEntityRecursively);
+                $done = $this->removeFollowInterestUser($interest, $user, $includeEntityRecursively);
             }
         } else {
             if ($interest != null && $user->existUnfollowInterest($interest)) {
-                $done = $user->removeUnfollowInterest($interest, $includeEntityRecursively);
+                $done = $this->removeUnfollowInterestUser($interest, $user,  $includeEntityRecursively);
             }
         }
         $this->em->persist($user);
