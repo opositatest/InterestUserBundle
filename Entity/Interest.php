@@ -3,7 +3,6 @@ namespace Opositatest\InterestUserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use Opositatest\InterestUserBundle\Model\UserInterface;
 use Opositatest\InterestUserBundle\Model\UserTrait;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -40,12 +39,12 @@ class Interest {
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity="\Opositatest\InterestUserBundle\Entity\FollowInterestUser", mappedBy="interestId")
+     * @ORM\OneToMany(targetEntity="\Opositatest\InterestUserBundle\Entity\FollowInterestUser", mappedBy="interest")
      */
     private $followUsers;
 
     /**
-     * @ORM\OneToMany(targetEntity="\Opositatest\InterestUserBundle\Entity\UnFollowInterestUser", mappedBy="interestId")
+     * @ORM\OneToMany(targetEntity="\Opositatest\InterestUserBundle\Entity\UnFollowInterestUser", mappedBy="interest")
      */
     private $unfollowUsers;
 

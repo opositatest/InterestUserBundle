@@ -121,7 +121,7 @@ It add interest to logged user
 
 ```
 POST
-/api/interest/{interestId}
+/api/interest/{interest}
 ```
 ## Remove interest
 
@@ -129,7 +129,7 @@ It remove interest to logged user
 
 ```
 DELETE
-/api/interest/{interestId}
+/api/interest/{interest}
 ```
 
 ## View interests

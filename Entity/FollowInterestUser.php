@@ -25,14 +25,14 @@ class FollowInterestUser
      * @ORM\ManyToOne(targetEntity="\Opositatest\InterestUserBundle\Entity\Interest", inversedBy="followUsers")
      * @ORM\JoinColumn(name="interest_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    private $interestId;
+    private $interest;
 
     /**
      * @Groups({"interestUserView"})
      * @ORM\ManyToOne(targetEntity="\Opositatest\InterestUserBundle\Model\UserInterface", inversedBy="followInterests")
      * @ORM\JoinColumn(name="userinterface_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    private $userinterfaceId;
+    private $user;
 
 
     public function __construct()
@@ -60,33 +60,33 @@ class FollowInterestUser
     /**
      * @return mixed
      */
-    public function getInterestId()
+    public function getInterest()
     {
-        return $this->interestId;
+        return $this->interest;
     }
 
     /**
-     * @param mixed $interestId
+     * @param mixed $interest
      */
-    public function setInterestId($interestId)
+    public function setInterest($interest)
     {
-        $this->interestId = $interestId;
+        $this->interest = $interest;
     }
 
     /**
      * @return mixed
      */
-    public function getUserinterfaceId()
+    public function getUser()
     {
-        return $this->userinterfaceId;
+        return $this->user;
     }
 
     /**
-     * @param mixed $userinterfaceId
+     * @param mixed $user
      */
-    public function setUserinterfaceId($userinterfaceId)
+    public function setUser($user)
     {
-        $this->userinterfaceId = $userinterfaceId;
+        $this->user = $user;
     }
 
 }

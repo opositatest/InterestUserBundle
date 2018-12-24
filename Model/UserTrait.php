@@ -12,13 +12,13 @@ trait UserTrait
 {
     /**
      * @Groups({"interestUserView"})
-     * @ORM\OneToMany(targetEntity="\Opositatest\InterestUserBundle\Entity\FollowInterestUser", mappedBy="userinterfaceId", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="\Opositatest\InterestUserBundle\Entity\FollowInterestUser", mappedBy="user", cascade={"persist"})
      */
     private $followInterests;
 
     /**
      * @Groups({"interestUserView"})
-     * @ORM\OneToMany(targetEntity="\Opositatest\InterestUserBundle\Entity\UnFollowInterestUser", mappedBy="userinterfaceId", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="\Opositatest\InterestUserBundle\Entity\UnFollowInterestUser", mappedBy="user", cascade={"persist"})
      */
     private $unfollowInterests;
 
@@ -67,7 +67,7 @@ trait UserTrait
         $interests = new ArrayCollection();
         /** @var FollowInterestUser $followedinterest */
         foreach ($this->followInterests as $followedinterest) {
-            $interests->add($followedinterest->getInterestId());
+            $interests->add($followedinterest->getInterest());
         }
         return $interests;
     }
@@ -106,7 +106,7 @@ trait UserTrait
         $interests = new ArrayCollection();
         /** @var FollowInterestUser $followedinterest */
         foreach ($this->unfollowInterests as $unfollowedinterest) {
-            $interests->add($unfollowedinterest->getInterestId());
+            $interests->add($unfollowedinterest->getInterest());
         }
         return $interests;
     }
@@ -132,8 +132,8 @@ trait UserTrait
     }
 
     private function interestToInterestUser(Interest $interest, $interestUser) {
-        $interestUser->setInterestId($interest);
-        $interestUser->setUserinterfaceId($this);
+        $interestUser->setInterest($interest);
+        $interestUser->setUser($this);
         return $interestUser;
     }
 
