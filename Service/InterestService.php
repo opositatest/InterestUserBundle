@@ -86,6 +86,10 @@ class InterestService {
         /** @var UserTrait $user */
         $done = false;
 
+        if (null === $user) {
+            return $done;
+        }
+
         if ($followMode == null || ($followMode != self::FOLLOW_INTEREST && $followMode != self::UNFOLLOW_INTEREST)) {
             $followMode = self::FOLLOW_INTEREST;
         }
@@ -147,6 +151,10 @@ class InterestService {
     public function deleteInterestUser(Interest $interest, $user, $followMode = self::FOLLOW_INTEREST, $flush = false, $includeEntityRecursively = false) {
         /** @var UserTrait $user */
         $done = false;
+
+        if (null === $user) {
+            return $done;
+        }
 
         if ($followMode == null || ($followMode != self::FOLLOW_INTEREST && $followMode != self::UNFOLLOW_INTEREST)) {
             $followMode = self::FOLLOW_INTEREST;
