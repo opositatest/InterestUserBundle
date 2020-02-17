@@ -1,12 +1,17 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Opositatest\InterestUserBundle\Tests\Service;
 
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\EntityManager;
 use Opositatest\InterestUserBundle\Entity\Interest;
+use Opositatest\InterestUserBundle\Repository\InterestRepository;
 use Opositatest\InterestUserBundle\Service\InterestService;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use PHPUnit\Framework\TestCase;
 
-class InterestServiceTest extends WebTestCase
+class InterestServiceTest extends TestCase
 {
     private $container;
     /** @var InterestService $interestService */
@@ -14,23 +19,32 @@ class InterestServiceTest extends WebTestCase
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
-    {
-        self::bootKernel();
+    private $interestRepository;
 
-        $this->container = static::$kernel->getContainer();
-        $this->interestService = $this->container->get('interestUser.interest');
+    protected function setUp(): void
+    {
+        $em = $this->createMock(EntityManager::class);
+        $this->interestService = new InterestService($em);
+        $this->interestRepository = $this->createMock(InterestRepository::class);
+
+
+        $em->expects($this->any())
+            ->method('getRepository')
+            ->with("OpositatestInterestUserBundle:Interest")
+            ->willReturn($this->interestRepository);
     }
 
-    public function testgetInterestUser()
+    public function testgetInterestUser(): void
     {
+        $this->interestRepository->expects($this->any())
+            ->method('findAll')
+            ->willReturn([]);
+        
         $interests = $this->interestService->getInterests();
-        $this->assertInternalType('array', $interests);
-
-
+        $this->assertIsArray($interests);
     }
 
-    public function testPostInterestErrorUserNull()
+    public function testPostInterestErrorUserNull(): void
     {
         $interest = new Interest();
         $interest->setName("hello");
@@ -38,7 +52,7 @@ class InterestServiceTest extends WebTestCase
         $this->assertEquals($return, false);
     }
 
-    public function testDeleteInterestErrorUserNull()
+    public function testDeleteInterestErrorUserNull(): void
     {
         $interest = new Interest();
         $interest->setName("hello");
